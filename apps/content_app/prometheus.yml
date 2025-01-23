@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "content_app"
+    static_configs:
+      - targets: ["content_app:8003"]

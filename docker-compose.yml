@@ -1,0 +1,131 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ledger
+      POSTGRES_PASSWORD: ledger
+      POSTGRES_DB: ledger_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Content App Instances
+  content_app_1:
+    build:
+      context: ./apps/content_app
+    environment:
+      PYTHONPATH: /app
+    volumes:
+      - ./core:/app/core
+      - ./infrastructure:/app/infrastructure
+      - ./apps/content_app:/app/content_app
+    working_dir: /app
+    profiles:
+      - dev
+      - prod
+    depends_on:
+      - postgres
+
+  content_app_2:
+    build:
+      context: ./apps/content_app
+    environment:
+      PYTHONPATH: /app
+    volumes:
+      - ./core:/app/core
+      - ./infrastructure:/app/infrastructure
+      - ./apps/content_app:/app/content_app
+    working_dir: /app
+    profiles:
+     - prod
+    depends_on:
+      - postgres
+
+  content_app_3:
+    build:
+      context: ./apps/content_app
+    environment:
+      PYTHONPATH: /app
+    volumes:
+      - ./core:/app/core
+      - ./infrastructure:/app/infrastructure
+      - ./apps/content_app:/app/content_app
+    working_dir: /app
+    profiles:
+      - prod
+    depends_on:
+      - postgres
+
+  # Ecommerce App Instances
+  ecommerce_app_1:
+    build:
+      context: ./apps/ecommerce_app
+    environment:
+      PYTHONPATH: /app
+    volumes:
+      - ./core:/app/core
+      - ./infrastructure:/app/infrastructure
+      - ./apps/ecommerce_app:/app/ecommerce_app
+    working_dir: /app
+    profiles:
+      - dev
+      - prod
+    depends_on:
+      - postgres
+
+  ecommerce_app_2:
+    build:
+      context: ./apps/ecommerce_app
+    environment:
+      PYTHONPATH: /app
+    profiles:
+     - prod
+    volumes:
+      - ./core:/app/core
+      - ./infrastructure:/app/infrastructure
+      - ./apps/ecommerce_app:/app/ecommerce_app
+    working_dir: /app
+    depends_on:
+      - postgres
+
+  ecommerce_app_3:
+    build:
+      context: ./apps/ecommerce_app
+    environment:
+      PYTHONPATH: /app
+    profiles:
+     - prod
+    volumes:
+      - ./core:/app/core
+      - ./infrastructure:/app/infrastructure
+      - ./apps/ecommerce_app:/app/ecommerce_app
+    working_dir: /app
+    depends_on:
+      - postgres
+
+  # Nginx Load Balancer
+  load_balancer:
+    image: nginx:latest
+    container_name: nginx_load_balancer
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    profiles:
+     - prod
+    depends_on:
+      - content_app_1
+      - ecommerce_app_1
+  prometheus_exporter:
+    image: nginx/nginx-prometheus-exporter:0.10.0
+    container_name: nginx_exporter
+    ports:
+      - "9113:9113"
+    command: -nginx.scrape-uri=http://nginx_load_balancer/stub_status
+    profiles:
+     - prod
+    depends_on:
+      - load_balancer
+volumes:
+  postgres_data:
