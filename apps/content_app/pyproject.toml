@@ -15,6 +15,7 @@ sqlalchemy = "^2.0.37"
 pydantic-settings = "^2.7.1"
 psycopg2-binary = "^2.9.10"
 asyncpg = "^0.30.0"
+pytest = "^8.3.4"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -38,6 +39,9 @@ version_scheme = "pep440"
 version_provider = "poetry"
 update_changelog_on_bump = true
 major_version_zero = true
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
 
 [build-system]
 requires = ["poetry-core"]

@@ -58,16 +58,16 @@ shared-ledger-system/
 │   │   ├── poetry.lock
 │   │   ├── prometheus.yml
 │   │   ├── pyproject.toml
-│   │   ├── src
-│   │   │   ├── domain
-│   │   │   │   └── content_operation.py
-│   │   │   ├── main.py
-│   │   │   ├── presentation
-│   │   │   │   ├── dependencies.py
-│   │   │   │   └── routers.py
-│   │   │   └── services
-│   │   │       └── content_service.py
-│   │   └── tests
+│   │   └── src
+│   │       ├── domain
+│   │       │   └── content_operation.py
+│   │       ├── main.py
+│   │       ├── presentation
+│   │       │   ├── dependencies.py
+│   │       │   └── routers.py
+│   │       └── services
+│   │           └── content_service.py
+│   │   
 │   └── ecommerce_app
 │       ├── Dockerfile
 │       ├── poetry.lock
@@ -118,6 +118,9 @@ shared-ledger-system/
 │   │   └── logger.py
 │   ├── rate_limiter.py
 │   └── repositories
+│       ├── tests/
+│       │   ├── test_sqlalchemy_ledger_repository.py
+│       │   └── conftest.py
 │       └── sqlalchemy_ledger_repository.py
 ├── mypy.ini
 ├── nginx.conf
@@ -242,8 +245,8 @@ make up-prod
 - Use `Poetry` for managing dependencies.
 
 ### Linting and Formatting
-make lint (black - isort)
-make format  (mypy - flake8)
+- make lint (black - isort)
+- make format  (mypy - flake8)
 
 ### Static Type Checking
 - `mypy` is used for static type checking.
@@ -252,6 +255,23 @@ make format  (mypy - flake8)
 - Include a GitHub Actions pipeline for linting, testing, and deployment.
 
 
+
+## Project Screenshots
+
+### Swagger Views
+![App Screenshot4](./docs/content_1.png)
+![App Screenshot5](./docs/content_1.png)
+![App Screenshot6](./docs/ecommerce_1.png)
+![App Screenshot7](./docs/ecommerce_2.png)
+
+### Postman Requests
+![App Screenshot1](./docs/get_ledger_balance.png)
+![App Screenshot2](./docs/content_ledger_added.png)
+![App Screenshot3](./docs/invalid_operation.png)
+
+### Prometheus APP Metrics
+![App Screenshot8](./docs/content_metrics.png)
+![App Screenshot9](./docs/ecommerce_metrics.png)
 
 ## Development Notes
 - Use the dev profile in Docker Compose to run a single instance for local development.

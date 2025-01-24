@@ -11,11 +11,11 @@ app = FastAPI(
     description="API for managing contents and ledger operations",
     version="1.0.0",
     docs_url="/api/v1/content/docs",
-    openapi_url="/api/v1/content/openapi.json"
+    openapi_url="/api/v1/content/openapi.json",
 )
 app.add_middleware(SlowAPIMiddleware)
 app.state.limiter = limiter
-Instrumentator().instrument(app).expose(app)
+Instrumentator().instrument(app).expose(app, endpoint="/content/metrics", include_in_schema=False)
 
 app.include_router(router, prefix="/api/v1/content")
 

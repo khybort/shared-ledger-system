@@ -11,11 +11,11 @@ app = FastAPI(
     description="API for managing e-commerce and ledger operations",
     version="1.0.0",
     docs_url="/api/v1/ecommerce/docs",
-    openapi_url="/api/v1/ecommerce/openapi.json"
+    openapi_url="/api/v1/ecommerce/openapi.json",
 )
 app.add_middleware(SlowAPIMiddleware)
 app.state.limiter = limiter
-Instrumentator().instrument(app).expose(app)
+Instrumentator().instrument(app).expose(app, endpoint="/ecommerce/metrics", include_in_schema=False)
 app.include_router(router, prefix="/api/v1/ecommerce")
 
 
